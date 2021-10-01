@@ -4,3 +4,10 @@ v0.2
 - Ajout VarDumper (dev)
 - Ajout CharacterController 
 - Ajout tests
+
+V0.3
+- Création de la table characters
+- Ajout route de création 
+- Ajout test de création 
+- Création d'un service Character 
+- Affichage d'un Character grâce à son identifier

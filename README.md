@@ -1,4 +1,4 @@
-# LaGuildeDesSeigneurs
+# La Guilde Des Seigneurs
 Projet Symfony - Gobelins B3
 
 Répertoire de personnages.

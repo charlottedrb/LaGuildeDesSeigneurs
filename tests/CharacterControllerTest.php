@@ -17,10 +17,13 @@ class CharacterControllerTest extends WebTestCase
         $this->assertJsonResponse($client->getResponse());
     }
 
+    /**
+     * Test d'affichage d'un caractère;
+     */
     public function testDisplay()
     {
         $client = static::createClient();
-        $client->request('GET', '/character/display');
+        $client->request('GET', '/character/display/a9329c9d7a717519f33574d0be6fb20805d214fe');
 
         $this->assertJsonResponse($client->getResponse());
     }
