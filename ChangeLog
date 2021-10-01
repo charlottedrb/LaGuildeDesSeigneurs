@@ -1,0 +1,6 @@
+v0.2
+- Ajout Entity Character 
+- Ajout .htaccess 
+- Ajout VarDumper (dev)
+- Ajout CharacterController 
+- Ajout tests

@@ -15,37 +15,37 @@ class Character
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private $id = 1;
 
     /**
      * @ORM\Column(type="string", length=16)
      */
-    private $name;
+    private $name = 'Anardil';
 
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private $surname;
+    private $surname = 'Amie du soleil';
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
      */
-    private $caste;
+    private $caste = 'Magicien';
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $knowledge;
+    private $knowledge = 'Sciences';
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $intelligence;
+    private $intelligence = 130;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $life;
+    private $life = 11;
 
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
@@ -139,5 +139,13 @@ class Character
         $this->image = $image;
 
         return $this;
+    }
+
+    /**
+     * Converts the entity in an array.
+     */
+    public function toArray()
+    {
+        return get_object_vars($this);
     }
 }
