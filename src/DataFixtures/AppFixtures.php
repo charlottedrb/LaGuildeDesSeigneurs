@@ -23,6 +23,7 @@ class AppFixtures extends Fixture
                 ->setLife(rand(10, 20))
                 ->setIdentifier(hash('sha1', uniqid()))
                 ->setCreation(new DateTime())
+                ->setModification(new DateTime())
                 ->setImage('/images/eldalote.jpg')
             ;
 

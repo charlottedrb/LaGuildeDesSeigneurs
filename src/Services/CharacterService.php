@@ -52,6 +52,7 @@ class CharacterService implements CharacterServiceInterface
             ->setLife(12)
             ->setImage('/images/eldalote.jpg')
             ->setCreation(new \DateTime())
+            ->setModification(new \DateTime())
             ->setIdentifier(hash('sha1', uniqid()))
         ;
         
@@ -74,6 +75,7 @@ class CharacterService implements CharacterServiceInterface
             ->setKnowledge('Diplomatie')
             ->setIntelligence(110)
             ->setLife(13)
+            ->setModification(new \DateTime())
             ->setImage('/images/gorthol.jpg')
         ;
         
