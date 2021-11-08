@@ -7,12 +7,25 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class CharacterControllerTest extends WebTestCase
 {
     /**
+     * Tests redirect index.
+     *
+     * @return void
+     */
+    public function testRedirectIndex()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/character');
+
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
+    /**
      * Tests index.
      */
     public function testIndex()
     {
         $client = static::createClient();
-        $client->request('GET', '/character');
+        $client->request('GET', '/character/index');
 
         $this->assertJsonResponse($client->getResponse());
     }
