@@ -39,6 +39,4 @@ class CharacterService implements CharacterServiceInterface
 
         return $character;
     }
-
-
 }
