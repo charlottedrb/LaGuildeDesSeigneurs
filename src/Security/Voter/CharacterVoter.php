@@ -13,11 +13,15 @@ class CharacterVoter extends Voter
     public const CHARACTER_DISPLAY = 'characterDisplay';
     public const CHARACTER_CREATE = 'characterCreate';
     public const CHARACTER_INDEX = 'characterIndex';
+    public const CHARACTER_MODIFY = 'characterModify';
+    public const CHARACTER_DELETE = 'characterDelete';
 
     private const ATTRIBUTES =  array(
         self::CHARACTER_DISPLAY,
         self::CHARACTER_CREATE,
         self::CHARACTER_INDEX,
+        self::CHARACTER_MODIFY,
+        self::CHARACTER_DELETE,
     );
 
     protected function supports(string $attribute, $subject): bool
@@ -40,6 +44,14 @@ class CharacterVoter extends Voter
 
             case self::CHARACTER_INDEX: 
                 return $this->canIndex();
+                break;
+
+            case self::CHARACTER_MODIFY: 
+                return $this->canModify();
+                break;
+                
+            case self::CHARACTER_DELETE: 
+                return $this->canDelete();
                 break;
         }
 
@@ -74,6 +86,26 @@ class CharacterVoter extends Voter
      * @return boolean
      */
     private function  canIndex()
+    {
+        return true;
+    }
+
+    /**
+     * Checks if is allowed to modify
+     *
+     * @return boolean
+     */
+    private function  canModify()
+    {
+        return true;
+    }
+
+    /**
+     * Checks if is allowed to delete
+     *
+     * @return boolean
+     */
+    private function  canDelete()
     {
         return true;
     }

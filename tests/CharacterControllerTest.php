@@ -6,6 +6,24 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CharacterControllerTest extends WebTestCase
 {
+    private $client; 
+    private $content; 
+    private static $identifier;
+
+    public function setUp() : void
+    {
+        $this->client = static::createClient();
+    }
+
+    public function testCreate() 
+    {
+        $this->client->request('POST', '/character/create');
+
+        $this->assertJsonResponse($this->client->getResponse());
+        $this->defineIdentifier();
+        $this->assertIdentifier();
+    }
+    
     /**
      * Tests redirect index.
      *
@@ -13,10 +31,9 @@ class CharacterControllerTest extends WebTestCase
      */
     public function testRedirectIndex()
     {
-        $client = static::createClient();
-        $client->request('GET', '/character');
-
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/character');
+        
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -24,10 +41,9 @@ class CharacterControllerTest extends WebTestCase
      */
     public function testIndex()
     {
-        $client = static::createClient();
-        $client->request('GET', '/character/index');
+        $this->client->request('GET', '/character/index');
 
-        $this->assertJsonResponse($client->getResponse());
+        $this->assertJsonResponse($this->client->getResponse());
     }
 
     /**
@@ -35,15 +51,57 @@ class CharacterControllerTest extends WebTestCase
      */
     public function testDisplay()
     {
-        $client = static::createClient();
-        $client->request('GET', '/character/display/7414a10767e9f5e71d2fdd262c9a34ec69543698');
+        $this->client->request('GET', '/character/display/' . self::$identifier);
 
-        $this->assertJsonResponse($client->getResponse());
+        $this->assertJsonResponse();
+        $this->assertIdentifier();
     }
 
-    public function assertJsonResponse($response)
+    public function testBadIdentifier()
     {
+        $this->client->request('GET', '/character/display/badIdentifier');
+        $this->assertError404($this->client->getResponse()->getStatusCode());
+    }
+
+    public function testInexistingIdentifier()
+    {
+        $this->client->request('GET', '/character/display/7414a10767e9f5e71d2fdd262c9a34ec69543698error');
+        $this->assertError404($this->client->getResponse()->getStatusCode());
+    }
+
+    public function testModify() 
+    {
+        $this->client->request('PUT', '/character/modify/' . self::$identifier);
+        $this->assertJsonResponse();
+        $this->assertIdentifier();
+    }
+
+    public function testDelete() 
+    {
+        $this->client->request('DELETE', '/character/delete/' . self::$identifier);
+        $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function assertIdentifier()
+    {
+        $this->assertArrayHasKey('identifier', $this->content);
+    }
+
+    public function defineIdentifier()
+    {
+        self::$identifier = $this->content['identifier'];
+    }
+
+    public function assertError404($statusCode)
+    {
+        $this->assertEquals(404, $statusCode);
+    }
+
+    public function assertJsonResponse()
+    {
+        $response = $this->client->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->headers->contains('Content-Type', 'application/json'), $response->headers);
+        $this->content = json_decode($response->getContent(), true, 50);
     }
 }
