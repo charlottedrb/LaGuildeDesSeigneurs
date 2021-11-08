@@ -65,7 +65,7 @@ class PlayerControllerTest extends WebTestCase
 
     public function testInexistingIdentifier()
     {
-        $this->client->request('GET', '/player/display/1');
+        $this->client->request('GET', '/player/display/7ba48618db8e2108a57604108ff9bc835a3error');
         $this->assertError404($this->client->getResponse()->getStatusCode());
     }
 

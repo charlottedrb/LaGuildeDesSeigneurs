@@ -65,7 +65,7 @@ class CharacterControllerTest extends WebTestCase
 
     public function testInexistingIdentifier()
     {
-        $this->client->request('GET', '/character/display/7414a10767e9f5e71d2fdd262c9a34ec69543698error');
+        $this->client->request('GET', '/character/display/7414a10767e9f5e71d2fdd262c9a34ec695error');
         $this->assertError404($this->client->getResponse()->getStatusCode());
     }
 
