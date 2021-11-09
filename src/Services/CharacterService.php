@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Entity\Character;
-use App\Repository\CharacterRepository;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Finder\Finder;
+use App\Repository\CharacterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CharacterService implements CharacterServiceInterface
@@ -90,8 +91,57 @@ class CharacterService implements CharacterServiceInterface
      */
     public function delete(Character $character)
     {        
-        $this->em->remove($character);
+        $this->em->remove($character);  
 
         return $this->em->flush();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImages(int $number)
+    {
+        $folder = __DIR__ . '/../../public/images';
+
+        $finder = new Finder();
+        $finder 
+            ->files()
+            ->in($folder)
+            ->notPath('/cartes/')
+            ->sortByName()
+        ;
+
+        $images = [];
+        foreach ($finder as $file) {
+            $images[] = '/images/' . $file->getRelativePathname();
+        }
+        shuffle($images);
+
+        return array_slice($images, 0, $number, true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImagesByKind(string $kind, int $number)
+    {
+        $folder = __DIR__ . '/../../public/images' . $kind;
+
+        $finder = new Finder();
+        $finder 
+            ->files()
+            ->in($folder)
+            ->notPath('/cartes/')
+            ->sortByName()
+        ;
+
+        $images = [];
+        foreach ($finder as $file) {
+            $images[] = '/images/' . $kind . '/' . $file->getRelativePathname();
+        }
+        shuffle($images);
+
+        return array_slice($images, 0, $number, true);
+    }
+        
 }

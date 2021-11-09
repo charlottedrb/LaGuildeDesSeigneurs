@@ -65,4 +65,21 @@ class CharacterController extends AbstractController
         $character = $this->characterService->delete($character);
         $this->denyAccessUnlessGranted('characterDelete', $character);
     }
+
+    #[Route('/character/images/{number}', name: 'character_images', requirements: ['number' => '^([0-9]{1,2})$'], methods: ['GET', 'HEAD'])]
+    public function images(int $number)
+    {
+        $this->denyAccessUnlessGranted('characterIndex', null); 
+        $images = $this->characterService->getImages($number);
+
+        return new JsonResponse($images);
+    }
+
+    #[Route('/character/images/{kind}/{number}', name: 'character_images_by_kind', requirements: ['kind' => '^(dames|ennemies|ennemis|seigneurs)$', 'number' => '^([0-9]{1,2})$'], methods: ['GET', 'HEAD'])]
+    public function imagesByKind(string $kind, int $number)
+    {
+        $this->denyAccessUnlessGranted('characterIndex', null); 
+
+        return new JsonResponse($this->characterService->getImagesByKind($kind, $number));
+    }
 }
