@@ -9,7 +9,13 @@ interface PlayerServiceInterface
     /**
      * Creates the player.
      */
-    public function create();
+    public function create(string $data);
+
+
+    public function isEntityFilled(Player $player);
+
+    public function submit(Player $player, $formName, $data);
+
 
     /**
      * Gets all the player.
@@ -19,7 +25,7 @@ interface PlayerServiceInterface
     /**
      * Modifies the player.
      */
-    public function modify(Player $player);
+    public function modify(Player $player, string $data);
 
     /**
      * Deletes the player.

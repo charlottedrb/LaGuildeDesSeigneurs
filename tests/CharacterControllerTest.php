@@ -17,9 +17,16 @@ class CharacterControllerTest extends WebTestCase
 
     public function testCreate() 
     {
-        $this->client->request('POST', '/character/create');
+        $this->client->request(
+            'POST', 
+            '/character/create', 
+            array(), //parameters
+            array(), //files
+            array('CONTENT_TYPE' => 'application/json'), //server   
+            '{"kind":"Dame","name":"Eldalótë","surname":"Fleur elfique","caste":"Elfe","knowledge":"Arts","intelligence":120,"life":12,"image":"/images/eldalote.jpg"}'
+        );
 
-        $this->assertJsonResponse($this->client->getResponse());
+        $this->assertJsonResponse();
         $this->defineIdentifier();
         $this->assertIdentifier();
     }
@@ -71,7 +78,15 @@ class CharacterControllerTest extends WebTestCase
 
     public function testModify() 
     {
-        $this->client->request('PUT', '/character/modify/' . self::$identifier);
+        $this->client->request(
+            'PUT', 
+            '/character/modify/' . self::$identifier,
+            array(), 
+            array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            '{"kind": "Seigneur", "name": "Gorthol"}'
+        );
+
         $this->assertJsonResponse();
         $this->assertIdentifier();
     }
@@ -80,6 +95,26 @@ class CharacterControllerTest extends WebTestCase
     {
         $this->client->request('DELETE', '/character/delete/' . self::$identifier);
         $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testImages()
+     {
+        //Tests without kind
+        $this->client->request('GET', '/character/images/3');
+        $this->assertJsonResponse();
+
+        //Tests with kind
+        $this->client->request('GET', '/character/images/dames/3');
+        $this->assertJsonResponse();
+
+        $this->client->request('GET', '/character/images/ennemis/3');
+        $this->assertJsonResponse();
+
+        $this->client->request('GET', '/character/images/ennemies/3');
+        $this->assertJsonResponse();
+
+        $this->client->request('GET', '/character/images/seigneurs/3');
+        $this->assertJsonResponse();
     }
 
     public function assertIdentifier()

@@ -17,9 +17,16 @@ class PlayerControllerTest extends WebTestCase
 
     public function testCreate() 
     {
-        $this->client->request('POST', '/player/create');
+        $this->client->request(
+            'POST', 
+            '/player/create', 
+            array(), //parameters
+            array(), //files
+            array('CONTENT_TYPE' => 'application/json'), //server   
+            '{"firstname":"Thomas","lastname":"Ghignon","email": "thomas.ghignon@gmail.com","mirian":999, "pseudo":"Starf" }'
+        );
 
-        $this->assertJsonResponse($this->client->getResponse());
+        $this->assertJsonResponse();
         $this->defineIdentifier();
         $this->assertIdentifier();
     }
@@ -43,7 +50,7 @@ class PlayerControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/player/index');
 
-        $this->assertJsonResponse($this->client->getResponse());
+        $this->assertJsonResponse();
     }
 
     /**
@@ -80,7 +87,29 @@ class PlayerControllerTest extends WebTestCase
      */
     public function testModify() 
     {
-        $this->client->request('PUT', '/player/modify/' . self::$identifier);
+        // Test partiel
+        $this->client->request(
+            'PUT', 
+            '/player/modify/' . self::$identifier,
+            array(), 
+            array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            '{"firstname": "Charlotte", "lastname": "Der Baghdassarian"}'
+        );
+
+        $this->assertJsonResponse();
+        $this->assertIdentifier();
+
+        // Test complet
+        $this->client->request(
+            'PUT', 
+            '/player/modify/' . self::$identifier,
+            array(), //parameters
+            array(), //files
+            array('CONTENT_TYPE' => 'application/json'), //server   
+            '{"firstname":"Charlotte","lastname":"Der Baghdassarian","email": "charlotte.db@gmail.com","mirian":10000000, "pseudo":"Chachou" }'
+        );
+
         $this->assertJsonResponse();
         $this->assertIdentifier();
     }

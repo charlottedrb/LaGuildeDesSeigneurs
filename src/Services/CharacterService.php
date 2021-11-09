@@ -2,24 +2,32 @@
 
 namespace App\Services;
 
+use DateTime;
+use LogicException;
 use App\Entity\Character;
+use App\Form\CharacterType;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Finder\Finder;
 use App\Repository\CharacterRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class CharacterService implements CharacterServiceInterface
 {
     private $characterRepository;
     private $em;
+    private $formFactory;
 
     public function __construct(
         CharacterRepository $characterRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        FormFactoryInterface $formFactory
     )
     {
         $this->characterRepository = $characterRepository;
         $this->em = $em;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -40,23 +48,18 @@ class CharacterService implements CharacterServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function create()
+    public function create(string $data)
     {
-        $character = new Character(); 
+        //Use with {"kind":"Dame","name":"Eldalótë","surname":"Fleur elfique","caste":"Elfe","knowledge":"Arts","intelligence":120,"life":12,"image":"/images/eldalote.jpg"}
+        $character = new Character();
         $character
-            ->setKind('Dame')
-            ->setName('Eldalote')
-            ->setSurname('Fleur elfique')
-            ->setCaste('Elfe')
-            ->setKnowledge('Arts')
-            ->setIntelligence(120)
-            ->setLife(12)
-            ->setImage('/images/eldalote.jpg')
-            ->setCreation(new \DateTime())
-            ->setModification(new \DateTime())
             ->setIdentifier(hash('sha1', uniqid()))
+            ->setCreation(new DateTime())
+            ->setModification(new DateTime())
         ;
-        
+        $this->submit($character, CharacterType::class, $data);
+        $this->isEntityFilled($character);
+
         $this->em->persist($character);
         $this->em->flush();
 
@@ -66,19 +69,50 @@ class CharacterService implements CharacterServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function modify(Character $character)
+    public function isEntityFilled(Character $character)
     {
-        $character
-            ->setKind('Seigneur')
-            ->setName('Gorthol')
-            ->setSurname('Haume de terreur')
-            ->setCaste('Chevalier')
-            ->setKnowledge('Diplomatie')
-            ->setIntelligence(110)
-            ->setLife(13)
-            ->setModification(new \DateTime())
-            ->setImage('/images/gorthol.jpg')
-        ;
+        if (null === $character->getKind() ||
+            null === $character->getName() ||
+            null === $character->getSurname() ||
+            null === $character->getIdentifier() ||
+            null === $character->getCreation() ||
+            null === $character->getModification()) {
+            throw new UnprocessableEntityHttpException('Missing data for Entity -> ' . json_encode($character->toArray()));
+        }
+    }
+   
+    /**
+     * {@inheritdoc}
+     */
+    public function submit(Character $character, $formName, $data)
+    {
+        $dataArray = is_array($data) ? $data : json_decode($data, true);
+
+        //Bad array
+        if (null !== $data && !is_array($dataArray)) {
+            throw new UnprocessableEntityHttpException('Submitted data is not an array -> ' . $data);
+        }
+
+        //Submits form
+        $form = $this->formFactory->create($formName, $character, ['csrf_protection' => false]);
+        $form->submit($dataArray, false);//With false, only submitted fields are validated
+
+        //Gets errors
+        $errors = $form->getErrors();
+        foreach ($errors as $error) {
+            throw new LogicException('Error ' . get_class($error->getCause()) . ' --> ' . $error->getMessageTemplate() . ' ' . json_encode($error->getMessageParameters()));
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function modify(Character $character, string $data)
+    {
+        $this->submit($character, CharacterType::class, $data);
+        $this->isEntityFilled($character);
+
+        $character->setModification(new \DateTime());
         
         $this->em->persist($character);
         $this->em->flush();
@@ -99,7 +133,7 @@ class CharacterService implements CharacterServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getImages(int $number)
+    public function getImages(int $number, ?string $kind = null)
     {
         $folder = __DIR__ . '/../../public/images';
 
@@ -111,6 +145,10 @@ class CharacterService implements CharacterServiceInterface
             ->sortByName()
         ;
 
+        if(null !== $kind) {
+            $finder->path('/' . $kind .'/');
+        }
+
         $images = [];
         foreach ($finder as $file) {
             $images[] = '/images/' . $file->getRelativePathname();
@@ -118,30 +156,5 @@ class CharacterService implements CharacterServiceInterface
         shuffle($images);
 
         return array_slice($images, 0, $number, true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImagesByKind(string $kind, int $number)
-    {
-        $folder = __DIR__ . '/../../public/images' . $kind;
-
-        $finder = new Finder();
-        $finder 
-            ->files()
-            ->in($folder)
-            ->notPath('/cartes/')
-            ->sortByName()
-        ;
-
-        $images = [];
-        foreach ($finder as $file) {
-            $images[] = '/images/' . $kind . '/' . $file->getRelativePathname();
-        }
-        shuffle($images);
-
-        return array_slice($images, 0, $number, true);
-    }
-        
+    }   
 }

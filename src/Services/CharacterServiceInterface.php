@@ -9,7 +9,17 @@ interface CharacterServiceInterface
     /**
      * Creates the character.
      */
-    public function create();
+    public function create(string $data);
+
+     /**
+     * Checks if the entity has been well filled
+     */
+    public function isEntityFilled(Character $character);
+
+    /**
+     * Submits the data to hydrate object
+     */
+    public function submit(Character $character, $form, $data);
 
     /**
      * Gets all the character.
@@ -19,7 +29,7 @@ interface CharacterServiceInterface
     /**
      * Modifies the character.
      */
-    public function modify(Character $character);
+    public function modify(Character $character, string $data);
 
     /**
      * Deletes the character.
@@ -30,9 +40,4 @@ interface CharacterServiceInterface
      * Return random character images.
      */
     public function getImages(int $number);
-
-    /**
-     * Return character images by kind.
-     */
-    public function getImagesByKind(string $kind, int $number);
 }
