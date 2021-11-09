@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CharacterRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,21 +21,40 @@ class Character
 
     /**
      * @ORM\Column(type="string", length=16)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *  min = 3, 
+     *  max = 16
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *  min = 3, 
+     *  max = 64
+     * )
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
+     * @Assert\Length(
+     *  min = 3, 
+     *  max = 16
+     * )
      */
     private $caste;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *  min = 3, 
+     *  max = 16
+     * )
      */
     private $knowledge;
 
@@ -50,11 +70,19 @@ class Character
 
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
+     * @Assert\Length(
+     *  min = 5, 
+     *  max = 28
+     * )
      */
     private $image;
 
     /**
      * @ORM\Column(type="string", length=16)
+     * @Assert\Length(
+     *  min = 3, 
+     *  max = 16
+     * )
      */
     private $kind;
 
@@ -65,6 +93,10 @@ class Character
 
     /**
      * @ORM\Column(type="string", length=40)
+     * @Assert\Length(
+     *  min = 40, 
+     *  max = 40
+     * )
      */
     private $identifier;
 

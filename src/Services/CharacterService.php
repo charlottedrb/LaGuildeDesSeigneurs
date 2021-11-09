@@ -12,22 +12,26 @@ use App\Repository\CharacterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CharacterService implements CharacterServiceInterface
 {
     private $characterRepository;
     private $em;
     private $formFactory;
+    private $validator;
 
     public function __construct(
         CharacterRepository $characterRepository,
         EntityManagerInterface $em,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        ValidatorInterface $validator
     )
     {
         $this->characterRepository = $characterRepository;
         $this->em = $em;
         $this->formFactory = $formFactory;
+        $this->validator = $validator;
     }
 
     /**
@@ -71,12 +75,9 @@ class CharacterService implements CharacterServiceInterface
      */
     public function isEntityFilled(Character $character)
     {
-        if (null === $character->getKind() ||
-            null === $character->getName() ||
-            null === $character->getSurname() ||
-            null === $character->getIdentifier() ||
-            null === $character->getCreation() ||
-            null === $character->getModification()) {
+        $errors = $this->validator->validate($character);
+
+        if($errors->count() > 0) {
             throw new UnprocessableEntityHttpException('Missing data for Entity -> ' . json_encode($character->toArray()));
         }
     }
