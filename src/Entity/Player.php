@@ -206,7 +206,7 @@ class Player
         return $this;
     }
 
-    public function toArray() 
+    public function toArray()
     {
         return get_object_vars($this);
     }

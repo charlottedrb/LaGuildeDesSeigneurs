@@ -25,7 +25,9 @@ class PlayerVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        if(null !== $subject) return $subject instanceof Player && in_array($attribute, self::ATTRIBUTES);
+        if (null !== $subject) {
+            return $subject instanceof Player && in_array($attribute, self::ATTRIBUTES);
+        }
 
         return in_array($attribute, self::ATTRIBUTES);
     }
@@ -33,23 +35,23 @@ class PlayerVoter extends Voter
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         switch ($attribute) {
-            case self::PLAYER_DISPLAY: 
+            case self::PLAYER_DISPLAY:
                 return $this->canDisplay();
                 break;
-            
-            case self::PLAYER_CREATE: 
+
+            case self::PLAYER_CREATE:
                 return $this->canCreate();
                 break;
 
-            case self::PLAYER_INDEX: 
+            case self::PLAYER_INDEX:
                 return $this->canIndex();
                 break;
 
-            case self::PLAYER_MODIFY: 
+            case self::PLAYER_MODIFY:
                 return $this->canModify();
                 break;
-                
-            case self::PLAYER_DELETE: 
+
+            case self::PLAYER_DELETE:
                 return $this->canDelete();
                 break;
         }
@@ -74,7 +76,7 @@ class PlayerVoter extends Voter
      *
      * @return boolean
      */
-    private function  canCreate()
+    private function canCreate()
     {
         return true;
     }
@@ -84,7 +86,7 @@ class PlayerVoter extends Voter
      *
      * @return boolean
      */
-    private function  canIndex()
+    private function canIndex()
     {
         return true;
     }
@@ -94,7 +96,7 @@ class PlayerVoter extends Voter
      *
      * @return boolean
      */
-    private function  canModify()
+    private function canModify()
     {
         return true;
     }
@@ -104,7 +106,7 @@ class PlayerVoter extends Voter
      *
      * @return boolean
      */
-    private function  canDelete()
+    private function canDelete()
     {
         return true;
     }

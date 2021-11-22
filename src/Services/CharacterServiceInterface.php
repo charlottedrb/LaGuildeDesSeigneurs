@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Services;
 
@@ -11,9 +11,9 @@ interface CharacterServiceInterface
      */
     public function create(string $data);
 
-     /**
-     * Checks if the entity has been well filled
-     */
+    /**
+    * Checks if the entity has been well filled
+    */
     public function isEntityFilled(Character $character);
 
     /**
@@ -40,6 +40,6 @@ interface CharacterServiceInterface
      * Return random character images.
      */
     public function getImages(int $number);
-    
-    public function serializeJson(int $number);
+
+    public function serializeJson(mixed $data);
 }

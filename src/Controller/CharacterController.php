@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Character;
-use Doctrine\ORM\Mapping\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use App\Services\CharacterServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/character', name: 'character_redirect_index', methods: ['HEAD', 'GET'])]
-    public function redirectIndex() 
+    public function redirectIndex()
     {
         return $this->redirectToRoute('character_index');
     }
@@ -72,7 +72,7 @@ class CharacterController extends AbstractController
     #[Route('/character/images/{number}', name: 'character_images', requirements: ['number' => '^([0-9]{1,2})$'], methods: ['GET', 'HEAD'])]
     public function images(int $number)
     {
-        $this->denyAccessUnlessGranted('characterIndex', null); 
+        $this->denyAccessUnlessGranted('characterIndex', null);
         $images = $this->characterService->getImages($number);
 
         return new JsonResponse($images);
@@ -81,7 +81,7 @@ class CharacterController extends AbstractController
     #[Route('/character/images/{kind}/{number}', name: 'character_images_by_kind', requirements: ['kind' => '^(dames|ennemies|ennemis|seigneurs)$', 'number' => '^([0-9]{1,2})$'], methods: ['GET', 'HEAD'])]
     public function imagesByKind(string $kind, int $number)
     {
-        $this->denyAccessUnlessGranted('characterIndex', null); 
+        $this->denyAccessUnlessGranted('characterIndex', null);
 
         return new JsonResponse($this->characterService->getImages($number, $kind));
     }

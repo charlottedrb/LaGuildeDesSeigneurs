@@ -31,8 +31,7 @@ class CharacterService implements CharacterServiceInterface
         EntityManagerInterface $em,
         FormFactoryInterface $formFactory,
         ValidatorInterface $validator
-    )
-    {
+    ) {
         $this->characterRepository = $characterRepository;
         $this->em = $em;
         $this->formFactory = $formFactory;
@@ -75,11 +74,11 @@ class CharacterService implements CharacterServiceInterface
     {
         $errors = $this->validator->validate($character);
 
-        if($errors->count() > 0) {
-            throw new UnprocessableEntityHttpException('Missing data for Entity -> ' . json_encode($character->toArray()));
+        if ($errors->count() > 0) {
+            throw new UnprocessableEntityHttpException((string) $errors . ' Missing data for Entity -> ' . $this->serializeJson($character));
         }
     }
-   
+
     /**
      * {@inheritdoc}
      */
@@ -112,7 +111,7 @@ class CharacterService implements CharacterServiceInterface
         $this->isEntityFilled($character);
 
         $character->setModification(new \DateTime());
-        
+
         $this->em->persist($character);
         $this->em->flush();
 
@@ -123,8 +122,8 @@ class CharacterService implements CharacterServiceInterface
      * {@inheritdoc}
      */
     public function delete(Character $character)
-    {        
-        $this->em->remove($character);  
+    {
+        $this->em->remove($character);
 
         return $this->em->flush();
     }
@@ -137,14 +136,14 @@ class CharacterService implements CharacterServiceInterface
         $folder = __DIR__ . '/../../public/images';
 
         $finder = new Finder();
-        $finder 
+        $finder
             ->files()
             ->in($folder)
             ->notPath('/cartes/')
             ->sortByName()
         ;
 
-        if(null !== $kind) {
+        if (null !== $kind) {
             $finder->path('/' . $kind .'/');
         }
 
@@ -155,12 +154,12 @@ class CharacterService implements CharacterServiceInterface
         shuffle($images);
 
         return array_slice($images, 0, $number, true);
-    }   
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function serializeJson($data) 
+    public function serializeJson($data)
     {
         $encoders = new JsonEncoder();
         $defaultContext = [

@@ -20,7 +20,7 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/player', name: 'player_redirect_index', methods: ['HEAD', 'GET'])]
-    public function redirectIndex() 
+    public function redirectIndex()
     {
         return $this->redirectToRoute('player_index');
     }

@@ -26,7 +26,9 @@ class CharacterVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        if(null !== $subject) return $subject instanceof Character && in_array($attribute, self::ATTRIBUTES);
+        if (null !== $subject) {
+            return $subject instanceof Character && in_array($attribute, self::ATTRIBUTES);
+        }
 
         return in_array($attribute, self::ATTRIBUTES);
     }
@@ -34,23 +36,23 @@ class CharacterVoter extends Voter
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         switch ($attribute) {
-            case self::CHARACTER_DISPLAY: 
+            case self::CHARACTER_DISPLAY:
                 return $this->canDisplay();
                 break;
-            
-            case self::CHARACTER_CREATE: 
+
+            case self::CHARACTER_CREATE:
                 return $this->canCreate();
                 break;
 
-            case self::CHARACTER_INDEX: 
+            case self::CHARACTER_INDEX:
                 return $this->canIndex();
                 break;
 
-            case self::CHARACTER_MODIFY: 
+            case self::CHARACTER_MODIFY:
                 return $this->canModify();
                 break;
-                
-            case self::CHARACTER_DELETE: 
+
+            case self::CHARACTER_DELETE:
                 return $this->canDelete();
                 break;
         }
@@ -75,7 +77,7 @@ class CharacterVoter extends Voter
      *
      * @return boolean
      */
-    private function  canCreate()
+    private function canCreate()
     {
         return true;
     }
@@ -85,7 +87,7 @@ class CharacterVoter extends Voter
      *
      * @return boolean
      */
-    private function  canIndex()
+    private function canIndex()
     {
         return true;
     }
@@ -95,7 +97,7 @@ class CharacterVoter extends Voter
      *
      * @return boolean
      */
-    private function  canModify()
+    private function canModify()
     {
         return true;
     }
@@ -105,7 +107,7 @@ class CharacterVoter extends Voter
      *
      * @return boolean
      */
-    private function  canDelete()
+    private function canDelete()
     {
         return true;
     }

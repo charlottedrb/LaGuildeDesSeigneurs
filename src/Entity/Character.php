@@ -23,7 +23,7 @@ class Character
      * @ORM\Column(type="string", length=16)
      * @Assert\NotBlank
      * @Assert\Length(
-     *  min = 3, 
+     *  min = 3,
      *  max = 16
      * )
      */
@@ -33,7 +33,7 @@ class Character
      * @ORM\Column(type="string", length=64)
      * @Assert\NotBlank
      * @Assert\Length(
-     *  min = 3, 
+     *  min = 3,
      *  max = 64
      * )
      */
@@ -42,7 +42,7 @@ class Character
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
      * @Assert\Length(
-     *  min = 3, 
+     *  min = 3,
      *  max = 16
      * )
      */
@@ -52,7 +52,7 @@ class Character
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank
      * @Assert\Length(
-     *  min = 3, 
+     *  min = 3,
      *  max = 16
      * )
      */
@@ -71,7 +71,7 @@ class Character
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
      * @Assert\Length(
-     *  min = 5, 
+     *  min = 5,
      *  max = 28
      * )
      */
@@ -80,7 +80,7 @@ class Character
     /**
      * @ORM\Column(type="string", length=16)
      * @Assert\Length(
-     *  min = 3, 
+     *  min = 3,
      *  max = 16
      * )
      */
@@ -94,7 +94,7 @@ class Character
     /**
      * @ORM\Column(type="string", length=40)
      * @Assert\Length(
-     *  min = 40, 
+     *  min = 40,
      *  max = 40
      * )
      */

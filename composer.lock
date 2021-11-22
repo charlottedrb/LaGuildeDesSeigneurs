@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "529f987fa0d80aac5b31422ef91e5cf9",
+    "content-hash": "eb2f85b4ba57422913c0b27a81852f1f",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -6831,6 +6831,200 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.1"
             },
             "time": "2021-11-03T20:52:16+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "cbe085f9fdead5b6d62e4c022ca52dc9427a10ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cbe085f9fdead5b6d62e4c022ca52dc9427a10ee",
+                "reference": "cbe085f9fdead5b6d62e4c022ca52dc9427a10ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/1.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpstan",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-11-18T14:09:01+00:00"
+        },
+        {
+            "name": "phpstan/phpstan-symfony",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-symfony.git",
+                "reference": "edb55af46fe1aaa62fafae51c36ccd1b577125bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/edb55af46fe1aaa62fafae51c36ccd1b577125bb",
+                "reference": "edb55af46fe1aaa62fafae51c36ccd1b577125bb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "php": "^7.1 || ^8.0",
+                "phpstan/phpstan": "^1.0"
+            },
+            "conflict": {
+                "symfony/framework-bundle": "<3.0"
+            },
+            "require-dev": {
+                "nikic/php-parser": "^4.13.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/config": "^4.2 || ^5.0",
+                "symfony/console": "^4.0 || ^5.0",
+                "symfony/framework-bundle": "^4.4 || ^5.0",
+                "symfony/http-foundation": "^4.0 || ^5.0",
+                "symfony/messenger": "^4.2 || ^5.0",
+                "symfony/serializer": "^4.0 || ^5.0"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon",
+                        "rules.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lukáš Unger",
+                    "email": "looky.msc@gmail.com",
+                    "homepage": "https://lookyman.net"
+                }
+            ],
+            "description": "Symfony Framework extensions and rules for PHPStan",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-symfony/issues",
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.0.1"
+            },
+            "time": "2021-11-03T14:14:43+00:00"
+        },
+        {
+            "name": "rector/rector",
+            "version": "0.12.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rectorphp/rector.git",
+                "reference": "d7d4659acae85a9ba5b8b75d4dadb998ffed2a48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d7d4659acae85a9ba5b8b75d4dadb998ffed2a48",
+                "reference": "d7d4659acae85a9ba5b8b75d4dadb998ffed2a48",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0",
+                "phpstan/phpstan": "^1.1.1"
+            },
+            "conflict": {
+                "phpstan/phpdoc-parser": "<1.2",
+                "rector/rector-cakephp": "*",
+                "rector/rector-doctrine": "*",
+                "rector/rector-laravel": "*",
+                "rector/rector-nette": "*",
+                "rector/rector-phpoffice": "*",
+                "rector/rector-phpunit": "*",
+                "rector/rector-prefixed": "*",
+                "rector/rector-symfony": "*"
+            },
+            "bin": [
+                "bin/rector"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
+            "support": {
+                "issues": "https://github.com/rectorphp/rector/issues",
+                "source": "https://github.com/rectorphp/rector/tree/0.12.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-11-15T14:06:50+00:00"
         },
         {
             "name": "symfony/browser-kit",

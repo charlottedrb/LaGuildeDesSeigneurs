@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -20,16 +21,18 @@ class PlayerService implements PlayerServiceInterface
     private $playerRepository;
     private $em;
     private $formFactory;
+    private $validator;
 
     public function __construct(
         PlayerRepository $playerRepository,
         EntityManagerInterface $em,
-        FormFactoryInterface $formFactory
-    )
-    {
+        FormFactoryInterface $formFactory,
+        ValidatorInterface $validator
+    ) {
         $this->playerRepository = $playerRepository;
         $this->em = $em;
         $this->formFactory = $formFactory;
+        $this->validator = $validator;
     }
 
     /**
@@ -39,7 +42,7 @@ class PlayerService implements PlayerServiceInterface
     {
         $playersFinal = [];
         $players = $this->playerRepository->findAll();
-        
+
         foreach ($players as $player) {
             $playersFinal[] = $player->toArray();
         }
@@ -52,14 +55,14 @@ class PlayerService implements PlayerServiceInterface
      */
     public function create(string $data)
     {
-        $player = new Player(); 
+        $player = new Player();
 
         $player
             ->setModification(new \DateTime())
             ->setIdentifier(hash('sha1', uniqid()))
             ->setCreation(new \DateTime())
         ;
-        
+
         $this->submit($player, PlayerType::class, $data);
         $this->isEntityFilled($player);
 
@@ -74,15 +77,9 @@ class PlayerService implements PlayerServiceInterface
      */
     public function isEntityFilled(Player $player)
     {
-        if (null === $player->getFirstname() ||
-            null === $player->getLastname() ||
-            null === $player->getEmail() ||
-            null === $player->getMirian() ||
-            null === $player->getPseudo() ||
-            null === $player->getIdentifier() ||
-            null === $player->getCreation() ||
-            null === $player->getModification()) {
-            throw new UnprocessableEntityHttpException('Missing data for Entity -> ' . json_encode($player->toArray()));
+        $errors = $this->validator->validate($player);
+        if(count($errors) > 0) {
+            throw new UnprocessableEntityHttpException((string) $errors . ' Missing data for Entity -> ' . $this->serializeJson($player));
         }
     }
 
@@ -122,7 +119,7 @@ class PlayerService implements PlayerServiceInterface
             ->setPseudo('charlottedrb')
             ->setModification(new \DateTime())
         ;
-        
+
         $this->em->persist($player);
         $this->em->flush();
 
@@ -133,7 +130,7 @@ class PlayerService implements PlayerServiceInterface
      * {@inheritdoc}
      */
     public function delete(Player $player)
-    {        
+    {
         $this->em->remove($player);
 
         return $this->em->flush();
@@ -142,7 +139,7 @@ class PlayerService implements PlayerServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function serializeJson($data) 
+    public function serializeJson($data)
     {
         $encoders = new JsonEncoder();
         $defaultContext = [

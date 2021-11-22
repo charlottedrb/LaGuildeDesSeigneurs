@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Services;
 
@@ -32,5 +32,5 @@ interface PlayerServiceInterface
      */
     public function delete(Player $player);
 
-    public function serializeJson($data);
+    public function serializeJson(mixed $data);
 }
