@@ -28,4 +28,9 @@ final class Version20211108150045 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE player DROP identifier, DROP pseudo, DROP creation, DROP modification');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

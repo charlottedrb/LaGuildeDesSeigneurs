@@ -28,4 +28,9 @@ final class Version20211001140211 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE characters DROP identifier, CHANGE id id TINYINT(1) NOT NULL, CHANGE intelligence intelligence TINYINT(1) DEFAULT NULL, CHANGE life life TINYINT(1) DEFAULT NULL');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

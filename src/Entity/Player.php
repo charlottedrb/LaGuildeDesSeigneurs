@@ -3,7 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\PlayerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=PlayerRepository::class)
@@ -58,6 +65,16 @@ class Player
      */
     private $modification;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Character::class, mappedBy="player")
+     */
+    private $characters;
+
+    public function __construct()
+    {
+        $this->characters = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -111,14 +128,6 @@ class Player
         return $this;
     }
 
-    /**
-     * Converts the entity in an array.
-     */
-    public function toArray()
-    {
-        return get_object_vars($this);
-    }
-
     public function getIdentifier(): ?string
     {
         return $this->identifier;
@@ -165,5 +174,40 @@ class Player
         $this->modification = $modification;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Character[]
+     */
+    public function getCharacters(): Collection
+    {
+        return $this->characters;
+    }
+
+    public function addCharacter(Character $character): self
+    {
+        if (!$this->characters->contains($character)) {
+            $this->characters[] = $character;
+            $character->setPlayer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacter(Character $character): self
+    {
+        if ($this->characters->removeElement($character)) {
+            // set the owning side to null (unless already changed)
+            if ($character->getPlayer() === $this) {
+                $character->setPlayer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function toArray() 
+    {
+        return get_object_vars($this);
     }
 }

@@ -39,4 +39,9 @@ final class Version20211001122408 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP TABLE characters');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
