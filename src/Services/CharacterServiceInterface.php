@@ -40,4 +40,6 @@ interface CharacterServiceInterface
      * Return random character images.
      */
     public function getImages(int $number);
+    
+    public function serializeJson(int $number);
 }

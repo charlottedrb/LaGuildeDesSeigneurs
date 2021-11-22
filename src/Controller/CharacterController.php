@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Character;
+use Doctrine\ORM\Mapping\Entity;
 use App\Services\CharacterServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,14 +33,15 @@ class CharacterController extends AbstractController
 
         $characters = $this->characterService->getAll();
 
-        return new JsonResponse($characters);
+        return JsonResponse::fromJsonString($this->characterService->serializeJson($characters));
     }
 
     #[Route('/character/display/{identifier}', name: 'character_display', requirements: ['identifier' => '^([a-z0-9]{40})$'], methods: ['HEAD', 'GET'])]
+    #[Entity('character', expr:'repository.findOneByIdentifier(identifier)')]
     public function display(Character $character)
     {
         $this->denyAccessUnlessGranted('characterDisplay', $character);
-        return new JsonResponse($character->toArray());
+        return JsonResponse::fromJsonString($this->characterService->serializeJson($character));
     }
 
     #[Route('/character/create', name: 'character_create', methods: ['HEAD', 'POST'])]
@@ -48,7 +50,7 @@ class CharacterController extends AbstractController
         $this->denyAccessUnlessGranted('characterCreate', null);
         $character = $this->characterService->create($request->getContent());
 
-        return new JsonResponse($character->toArray());
+        return JsonResponse::fromJsonString($this->characterService->serializeJson($character));
     }
 
     #[Route('/character/modify/{identifier}', name: 'character_modify', requirements: ['identifier' => '^([a-z0-9]{40})$'], methods: ['PUT', 'HEAD'])]
@@ -57,7 +59,7 @@ class CharacterController extends AbstractController
         $character = $this->characterService->modify($character, $request->getContent());
         $this->denyAccessUnlessGranted('characterModify', $character);
 
-        return new JsonResponse($character->toArray());
+        return JsonResponse::fromJsonString($this->characterService->serializeJson($character));
     }
 
     #[Route('/character/delete/{identifier}', name: 'character_delete', requirements: ['identifier' => '^([a-z0-9]{40})$'], methods: ['DELETE', 'HEAD'])]
