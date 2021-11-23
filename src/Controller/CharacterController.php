@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 class CharacterController extends AbstractController
 {
@@ -37,7 +39,14 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/character/display/{identifier}', name: 'character_display', requirements: ['identifier' => '^([a-z0-9]{40})$'], methods: ['HEAD', 'GET'])]
-    #[Entity('character', expr:'repository.findOneByIdentifier(identifier)')]
+    #[Entity('character', expr: 'repository.findOneByIdentifier(identifier)')]
+    /**
+     * @OA\Parameter(name= "identifier", in= "path", description= "identifier for the Character", required= true)
+     * @OA\Response(response= 200, description= "Success", @Model(type= Character::class))
+     * @OA\Response(response= 403, description= "Access denied")
+     * @OA\Response(response= 404, description= "Not found")
+     * @OA\Tag(name= "Character")
+     */
     public function display(Character $character)
     {
         $this->denyAccessUnlessGranted('characterDisplay', $character);
@@ -45,6 +54,13 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/character/create', name: 'character_create', methods: ['HEAD', 'POST'])]
+    /**
+     * @OA\Parameter(name= "identifier", in= "path", description= "identifier for the Character", required= true)
+     * @OA\Response(response= 200, description= "Success", @Model(type= Character::class))
+     * @OA\Response(response= 403, description= "Access denied")
+     * @OA\Response(response= 404, description= "Not found")
+     * @OA\Tag(name= "Character")
+     */
     public function create(Request $request)
     {
         $this->denyAccessUnlessGranted('characterCreate', null);
@@ -54,6 +70,13 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/character/modify/{identifier}', name: 'character_modify', requirements: ['identifier' => '^([a-z0-9]{40})$'], methods: ['PUT', 'HEAD'])]
+    /**
+     * @OA\Parameter(name= "identifier", in= "path", description= "identifier for the Character", required= true)
+     * @OA\Response(response= 200, description= "Success", @Model(type= Character::class))
+     * @OA\Response(response= 403, description= "Access denied")
+     * @OA\Response(response= 404, description= "Not found")
+     * @OA\Tag(name= "Character")
+     */
     public function modify(Character $character, Request $request)
     {
         $character = $this->characterService->modify($character, $request->getContent());
@@ -63,6 +86,13 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/character/delete/{identifier}', name: 'character_delete', requirements: ['identifier' => '^([a-z0-9]{40})$'], methods: ['DELETE', 'HEAD'])]
+    /**
+     * @OA\Parameter(name= "identifier", in= "path", description= "identifier for the Character", required= true)
+     * @OA\Response(response= 200, description= "Success", @Model(type= Character::class))
+     * @OA\Response(response= 403, description= "Access denied")
+     * @OA\Response(response= 404, description= "Not found")
+     * @OA\Tag(name= "Character")
+     */
     public function delete(Character $character)
     {
         $character = $this->characterService->delete($character);
@@ -70,6 +100,13 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/character/images/{number}', name: 'character_images', requirements: ['number' => '^([0-9]{1,2})$'], methods: ['GET', 'HEAD'])]
+    /**
+     * @OA\Parameter(name= "number", in= "path", description= "number of images to generate", required= true)
+     * @OA\Response(response= 200, description= "Success", @Model(type= Character::class))
+     * @OA\Response(response= 403, description= "Access denied")
+     * @OA\Response(response= 404, description= "Not found")
+     * @OA\Tag(name= "Character")
+     */
     public function images(int $number)
     {
         $this->denyAccessUnlessGranted('characterIndex', null);
@@ -79,6 +116,14 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/character/images/{kind}/{number}', name: 'character_images_by_kind', requirements: ['kind' => '^(dames|ennemies|ennemis|seigneurs)$', 'number' => '^([0-9]{1,2})$'], methods: ['GET', 'HEAD'])]
+    /**
+     * @OA\Parameter(name= "kind", in= "path", description= "kind for the Character", required= true)
+     * @OA\Parameter(name= "number", in= "path", description= "number of images to generate", required= true)
+     * @OA\Response(response= 200, description= "Success", @Model(type= Character::class))
+     * @OA\Response(response= 403, description= "Access denied")
+     * @OA\Response(response= 404, description= "Not found")
+     * @OA\Tag(name= "Character")
+     */
     public function imagesByKind(string $kind, int $number)
     {
         $this->denyAccessUnlessGranted('characterIndex', null);
