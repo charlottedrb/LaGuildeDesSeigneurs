@@ -16,7 +16,7 @@ class CharacterHtmlType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'required' => false
+                'required' => false,
             ])
             ->add('surname',  TextType::class, [
                 'required' => true
