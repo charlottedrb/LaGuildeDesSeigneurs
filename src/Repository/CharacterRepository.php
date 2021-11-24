@@ -31,6 +31,18 @@ class CharacterRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByIntelligenceLevel(int $level)
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c')
+            ->where('c.intelligence >= :level')
+            ->setParameter('level', $level)
+            ->orderBy('c.intelligence', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Character[] Returns an array of Character objects
     //  */

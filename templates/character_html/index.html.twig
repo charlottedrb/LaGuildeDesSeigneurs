@@ -38,7 +38,11 @@
                         <td>{{ character.surname }}</td>
                         <td>{{ character.caste }}</td>
                         <td>{{ character.knowledge }}</td>
-                        <td>{{ character.intelligence }}</td>
+                        <td
+                        {% if ('intelligence' in app.request.uri) %}
+                            class="text-warning"
+                        {% endif %}
+                        >{{ character.intelligence }}</td>
                         <td>{{ character.life }}</td>
                         <td>{{ character.creation ? character.creation|date('d/m/Y') : '' }}</td>
                         <td>{{ character.modification ? character.modification|date('d/m/Y') : '' }}</td>

@@ -7,6 +7,7 @@ use App\Form\CharacterHtmlType;
 use App\Repository\CharacterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Services\CharacterServiceInterface;
+use PhpParser\Builder\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,16 +16,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/character/html')]
 class CharacterHtmlController extends AbstractController
 {
-    public function __construct(private CharacterServiceInterface $characterService)
-    {
-        
-    }
+    public function __construct(
+        private CharacterServiceInterface $characterService,
+        private CharacterRepository $characterRepository
+    )
+    { }
 
     #[Route('/', name: 'character_html_index', methods: ['GET'])]
-    public function index(CharacterRepository $characterRepository): Response
+    public function index(): Response
     {
         return $this->render('character_html/index.html.twig', [
-            'characters' => $characterRepository->findAll(),
+            'characters' => $this->characterRepository->findAll(),
         ]);
     }
 
@@ -87,5 +89,13 @@ class CharacterHtmlController extends AbstractController
         }
 
         return $this->redirectToRoute('character_html_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/intelligence/{level}', name: 'character_html_by_intelligence',requirements: ['level' => '^([0-9]{1,3})$'], methods: ['GET', 'HEAD'])]
+    public function getAllByIntelligenceLevel(int $level)
+    {
+        return $this->render('character_html/index.html.twig', [
+            'characters' => $this->characterRepository->findByIntelligenceLevel($level),
+        ]);
     }
 }

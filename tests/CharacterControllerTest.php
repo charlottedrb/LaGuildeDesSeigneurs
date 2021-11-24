@@ -76,6 +76,10 @@ class CharacterControllerTest extends WebTestCase
         $this->assertError404($this->client->getResponse()->getStatusCode());
     }
 
+    /**
+     * Test modify of a Character.
+     *
+     */
     public function testModify() 
     {
         $this->client->request(
@@ -91,12 +95,20 @@ class CharacterControllerTest extends WebTestCase
         $this->assertIdentifier();
     }
 
+    /**
+     * Test delete of a Character.
+     *
+     */
     public function testDelete() 
     {
         $this->client->request('DELETE', '/character/delete/' . self::$identifier);
         $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
     }
 
+    /**
+     * Test for image display.
+     *
+     */
     public function testImages()
      {
         //Tests without kind
@@ -115,6 +127,15 @@ class CharacterControllerTest extends WebTestCase
 
         $this->client->request('GET', '/character/images/seigneurs/3');
         $this->assertJsonResponse();
+    }
+
+    /**
+     * Tests index intelligence.
+     */
+    public function testIndexIntelligence()
+    {
+        $this->client->request('GET', '/character/intelligence/175');
+        $this->assertJsonResponse($this->client->getResponse());
     }
 
     public function assertIdentifier()

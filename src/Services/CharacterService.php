@@ -152,10 +152,7 @@ class CharacterService implements CharacterServiceInterface
     }
 
     /**
-     * Create a Character from HTML
-     *
-     * @param Character $character
-     * @return Character
+     * {@inheritdoc}
      */
     public function createFromHtml(Character $character)
     {
@@ -178,10 +175,7 @@ class CharacterService implements CharacterServiceInterface
     }
 
     /**
-     * Modify a Character
-     *
-     * @param Character $character
-     * @return Character
+     * {@inheritdoc}
      */
     public function modifyFromHtml(Character $character)
     {
@@ -193,5 +187,14 @@ class CharacterService implements CharacterServiceInterface
         $this->em->flush();
 
         return $character;
+    }
+
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllByIntelligenceLevel(int $level) 
+    {
+        return $this->characterRepository->findByIntelligenceLevel($level);
     }
 }

@@ -41,21 +41,23 @@ interface CharacterServiceInterface
      */
     public function getImages(int $number);
 
+    /**
+     * Serialize data to JSON
+     */
     public function serializeJson(mixed $data);
 
     /**
      * Create a Character from HTML
-     *
-     * @param Character $character
-     * @return Character
      */
     public function createFromHtml(Character $character);
 
      /**
      * Modify a Character from HTML
-     *
-     * @param Character $character
-     * @return Character
      */
     public function modifyFromHtml(Character $character);
+
+    /**
+     * Get all Characters by their intelligence level
+     */
+    public function getAllByIntelligenceLevel(int $level);
 }

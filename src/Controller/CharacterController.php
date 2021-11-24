@@ -126,4 +126,21 @@ class CharacterController extends AbstractController
 
         return new JsonResponse($this->characterService->getImages($number, $kind));
     }
+
+    #[Route('/character/intelligence/{level}', name: 'character_by_intelligence', requirements: ['level' => '^([0-9]{1,3})$'], methods: ['GET', 'HEAD'])]
+    /**
+     * @OA\Parameter(name= "level", in= "path", description= "kind for the Character", required= true)
+     * @OA\Response(response= 200, description= "Success", @Model(type= Character::class))
+     * @OA\Response(response= 403, description= "Access denied")
+     * @OA\Response(response= 404, description= "Not found")
+     * @OA\Tag(name= "Character")
+     */
+    public function getAllByIntelligenceLevel(int $level) 
+    {
+        $this->denyAccessUnlessGranted('characterIndex', null);
+
+        $characters = $this->characterService->getAllByIntelligenceLevel($level);
+
+        return JsonResponse::fromJsonString($this->characterService->serializeJson($characters));
+    }
 }

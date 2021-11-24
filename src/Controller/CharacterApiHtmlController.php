@@ -76,7 +76,7 @@ class CharacterApiHtmlController extends AbstractController
             'http://127.0.0.1:8000/character/display/' . $identifier
         );
 
-        return $this->render('character_html/show.html.twig', [
+        return $this->render('character_api_html/show.html.twig', [
             'character' => $response->toArray(),
         ]);
     }
@@ -139,12 +139,14 @@ class CharacterApiHtmlController extends AbstractController
      *     methods={"GET", "HEAD"}
      * )
      */
-    // public function intelligenceLevel(int $level)
-    // {
-    //     $this->denyAccessUnlessGranted('characterIndex', null);
-
-    //     return $this->render('character_api_html/index.html.twig', [
-    //         'characters' => $this->characterService->getAllByIntelligenceLevel($level),
-    //     ]);
-    // }
+    public function intelligenceLevel(int $level)
+    {
+        $response = $this->client->request(
+            'GET',
+            'http://127.0.0.1:8000/character/intelligence/' . $level
+        );
+        return $this->render('character_api_html/index.html.twig', [
+            'characters' => $response->toArray(),
+        ]);
+    }
 }
