@@ -15,12 +15,8 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 
 class CharacterController extends AbstractController
 {
-    private $characterService;
-
-    public function __construct(CharacterServiceInterface $characterService)
-    {
-        $this->characterService = $characterService;
-    }
+    public function __construct(private CharacterServiceInterface $characterService)
+    { }
 
     #[Route('/character', name: 'character_redirect_index', methods: ['HEAD', 'GET'])]
     public function redirectIndex()

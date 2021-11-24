@@ -14,12 +14,8 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 
 class PlayerController extends AbstractController
 {
-    private $playerService;
-
-    public function __construct(PlayerServiceInterface $playerService)
-    {
-        $this->playerService = $playerService;
-    }
+    public function __construct(private PlayerServiceInterface $playerService)
+    { }
 
     #[Route('/player', name: 'player_redirect_index', methods: ['HEAD', 'GET'])]
     public function redirectIndex()

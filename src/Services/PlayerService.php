@@ -5,6 +5,7 @@ namespace App\Services;
 use LogicException;
 use App\Entity\Player;
 use App\Form\PlayerType;
+use App\Event\PlayerEvent;
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Serializer;
@@ -12,28 +13,20 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class PlayerService implements PlayerServiceInterface
 {
-    private $playerRepository;
-    private $em;
-    private $formFactory;
-    private $validator;
-
     public function __construct(
-        PlayerRepository $playerRepository,
-        EntityManagerInterface $em,
-        FormFactoryInterface $formFactory,
-        ValidatorInterface $validator
-    ) {
-        $this->playerRepository = $playerRepository;
-        $this->em = $em;
-        $this->formFactory = $formFactory;
-        $this->validator = $validator;
-    }
+        private PlayerRepository $playerRepository,
+        private EntityManagerInterface $em,
+        private FormFactoryInterface $formFactory,
+        private ValidatorInterface $validator,
+        private EventDispatcherInterface $dispatcher
+    ) { }
 
     /**
      * {@inheritdoc}
@@ -112,13 +105,15 @@ class PlayerService implements PlayerServiceInterface
     public function modify(Player $player, string $data)
     {
         $player
-            ->setFirstname('Charlotte')
-            ->setLastname('Der Baghdassarian')
-            ->setEmail('c.derbaghdassarian@gmail.com')
-            ->setMirian('10000000')
-            ->setPseudo('charlottedrb')
             ->setModification(new \DateTime())
         ;
+
+        $this->submit($player, PlayerType::class, $data);
+        $this->isEntityFilled($player);
+
+        // Dispatch event 
+        $event = new PlayerEvent($player);
+        $this->dispatcher->dispatch($event, PlayerEvent::PLAYER_MODIFIED);
 
         $this->em->persist($player);
         $this->em->flush();
