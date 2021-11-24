@@ -130,12 +130,30 @@ class CharacterControllerTest extends WebTestCase
     }
 
     /**
-     * Tests index intelligence.
+     * Tests index API intelligence.
      */
-    public function testIndexIntelligence()
+    public function testIndexIntelligenceApi()
     {
         $this->client->request('GET', '/character/intelligence/175');
         $this->assertJsonResponse($this->client->getResponse());
+    }
+
+    /**
+     * Tests index HTML intelligence.
+     */
+    public function testIndexIntelligenceHtml()
+    {
+        $this->client->request('GET', '/character/html/intelligence/175');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Tests index API HTML intelligence.
+     */
+    public function testIndexIntelligenceApiHtml()
+    {
+        $this->client->request('GET', '/character/api-html/intelligence/175');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function assertIdentifier()
